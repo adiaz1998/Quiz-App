@@ -14,10 +14,14 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var trueButton: UIButton!
     
+    
     @IBOutlet weak var falseButton: UIButton!
+    
     
     @IBOutlet weak var questions: UILabel!
     
+    
+    // 2D Array - Two Dimensional Array
     var questionBank = [["5 + 2 = 9", "False"],
                         ["9 - 2 = 8", "False"],
                         ["2 + 3 = 5", "True"],
@@ -32,29 +36,52 @@ class ViewController: UIViewController {
         
     }
     
-    func updateUI(){
+    @objc func updateUI(){
         
-        questions.text = questionBank[0]
+        questions.text = questionBank[questionNumber][0]
+        trueButton.backgroundColor = UIColor.clear
+        falseButton.backgroundColor = UIColor.clear
+        
+        
         
     }
 
     @IBAction func buttonPressed(_ sender: UIButton) {
     
-        userInput = sender.currentTitle!
+    // 1. Check if the user input is actually the correct answer
         
-        if userInput == AnswerBank{
+    // 2. Change the question number
+        
+    // SENDER
+    
+        let userInput = sender.currentTitle!
+        
+        if userInput == questionBank[questionNumber][1] {
             
-            sender.backgroundColor = green
+            sender.backgroundColor = UIColor.green
             
+        }
+        
+        else {
+            sender.backgroundColor = UIColor.red
+        }
+        
+        if questionNumber + 1 < questionBank.count {
+            
+            questionNumber += 1
+        
         }
         
         else{
-        sender.backgroundColor = red
+            
+            questionNumber = 0
         }
         
-        question += 1
+        Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: #selector(updateUI), userInfo: nil, repeats: true)
         
     }
-    
+
 }
 
+//1, Color reset
+//2, Index out of range
