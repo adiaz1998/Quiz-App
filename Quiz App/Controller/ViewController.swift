@@ -13,20 +13,12 @@ class ViewController: UIViewController {
     
     
     @IBOutlet weak var trueButton: UIButton!
-    
-    
     @IBOutlet weak var falseButton: UIButton!
-    
-    
     @IBOutlet weak var questions: UILabel!
     
+    var quizbrain = QuizBrain()
+    //Creating an object to integrate Model and View Controller
     
-    // 2D Array - Two Dimensional Array
-    var questionBank = [["5 + 2 = 9", "False"],
-                        ["9 - 2 = 8", "False"],
-                        ["2 + 3 = 5", "True"],
-                        ["1 - 1 = -1", "False"]]
-    var questionNumber = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +30,7 @@ class ViewController: UIViewController {
     
     @objc func updateUI(){
         
-        questions.text = questionBank[questionNumber][0]
+        questions.text = quizbrain.getQuestion()
         trueButton.backgroundColor = UIColor.clear
         falseButton.backgroundColor = UIColor.clear
         
@@ -56,7 +48,9 @@ class ViewController: UIViewController {
     
         let userInput = sender.currentTitle!
         
-        if userInput == questionBank[questionNumber][1] {
+        let checkAnswer = quizbrain.checkAnswer(userInput)
+        
+        if checkAnswer {
             
             sender.backgroundColor = UIColor.green
             
@@ -66,16 +60,7 @@ class ViewController: UIViewController {
             sender.backgroundColor = UIColor.red
         }
         
-        if questionNumber + 1 < questionBank.count {
-            
-            questionNumber += 1
-        
-        }
-        
-        else{
-            
-            questionNumber = 0
-        }
+        quizbrain.nextQuestion()
         
         Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: #selector(updateUI), userInfo: nil, repeats: true)
         
